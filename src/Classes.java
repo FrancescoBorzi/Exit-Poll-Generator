@@ -1,3 +1,5 @@
+import java.util.Random;
+
 class Party
 {
     private int id, coalition, votes, percentage;
@@ -77,5 +79,20 @@ class Coalition
             parties[i] = null;
         
         partiesAddedCount = 0;
+    }
+}
+
+
+class Sample
+{
+    int people[];
+    
+    Sample(int[] population, int size)
+    {
+        people = new int[size];
+        Random rand = new Random();
+        
+        for (int i = 0; i < size; i ++)
+            people[i] = population[rand.nextInt(population.length)];
     }
 }
