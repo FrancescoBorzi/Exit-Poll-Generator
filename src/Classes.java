@@ -32,12 +32,12 @@ class Party
 
 class Coalition
 {
-    private int id, votes, percentage;
-    private int[] parties;
+    private int id, votes, percentage, partiesAddedCount;
+    private Party[] parties;
     private String name;
     private String logo;
     
-    public Coalition(int id, String name, String logo)
+    public Coalition(int id, String name, String logo, int parties)
     {
         this.id = id; // must be > 0
         this.name = name; // President's name
@@ -45,6 +45,9 @@ class Coalition
         
         votes = 0;
         percentage = 0;
+        
+        this.parties = new Party[parties]; // parties number must be <= 4
+        partiesAddedCount = 0; // must be <= 4
     }
     
     public int getId()          { return id; }
@@ -58,4 +61,21 @@ class Coalition
     public void setPercentage(int i)  { percentage = i; }
     public void setName(String i)     { name = i; }
     public void setLogo(String i)     { logo = i; }
+    
+    public void addParty(Party p)
+    {
+        if (partiesAddedCount >= 4)
+            return;
+        
+        parties[partiesAddedCount] = p;
+        partiesAddedCount++;
+    }
+    
+    public void resetParties()
+    {
+        for (int i = 0; i < partiesAddedCount; i++)
+            parties[i] = null;
+        
+        partiesAddedCount = 0;
+    }
 }
