@@ -1,8 +1,19 @@
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 public class MainFrame extends javax.swing.JFrame
 {
+    Toolkit myKit=Toolkit.getDefaultToolkit();
+    Dimension myScreenSize = myKit.getScreenSize();
+    
     public MainFrame()
     {
         initComponents();
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setTitle("Exit Poll Generator");
+        this.setLocation(myScreenSize.width/4, myScreenSize.height/4);
+        this.setVisible(true);
     }
 
     /**
