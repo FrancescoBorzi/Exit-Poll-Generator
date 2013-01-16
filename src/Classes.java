@@ -43,14 +43,28 @@ class DataBase
     
     public float getPercentage(Coalition c)
     {
-        // TODO
-        return 0;
+        long tot = 0;
+        float percentage;
+        
+        for (int i = 0; i < cIndex; i++)
+            tot += coalitions_db[i].getVotes();
+        
+        percentage = c.getVotes() * 100 / tot;
+        
+        return percentage;
     }
     
     public float getPercentage(Party p)
     {
-        // TODO
-        return 0;
+        long tot = 0;
+        float percentage;
+        
+        for (int i = 0; i < pIndex; i++)
+            tot += parties_db[i].getVotes();
+        
+        percentage = p.getVotes() * 100 / tot;
+        
+        return percentage;
     }
     
     public void reset()
@@ -78,13 +92,12 @@ class Party
         this.votes = votes;
     }
     
-    public int getId()          { return id; }
-    public int getCoalition()   { return coalition; }
-    public int getVotes()       { return votes; }
-    public String getName()     { return name; }
-    public String getLogo()     { return logo; }
-    
-    public float getPercentage()  { return db.getPercentage(this); }
+    public int getId()              { return id; }
+    public int getCoalition()       { return coalition; }
+    public int getVotes()           { return votes; }
+    public String getName()         { return name; }
+    public String getLogo()         { return logo; }
+    public float getPercentage()    { return db.getPercentage(this); }
 }
 
 class Coalition
@@ -109,15 +122,14 @@ class Coalition
     }
     
     public int getId()          { return id; }
-    public int getVotes()       { return votes; }
-    public String getName()     { return name; }
-    public String getLogo()     { return logo; }
-    
-    public float getPercentage()  { return db.getPercentage(this); }
+    public int getVotes()           { return votes; }
+    public String getName()         { return name; }
+    public String getLogo()         { return logo; }
+    public float getPercentage()    { return db.getPercentage(this); }
     
     public void addParty(Party p)
     {
-        if (partiesAddedCount >= 4)
+        if (partiesAddedCount > 4)
             return;
         
         parties[partiesAddedCount] = p;
@@ -125,6 +137,7 @@ class Coalition
         votes += p.getVotes();
     }
     
+    // Used for debugging only
     public void updateVotes()
     {
         votes = 0;
@@ -134,6 +147,7 @@ class Coalition
         }
     }
     
+    // Used for debugging only
     public void resetParties()
     {
         for (int i = 0; i < partiesAddedCount; i++)
