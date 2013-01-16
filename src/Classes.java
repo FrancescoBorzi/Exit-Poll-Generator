@@ -1,6 +1,6 @@
 import java.util.Random;
 
-class DataBase
+class VotesHandler
 {
     private Coalition[] coalitions_db;
     private Party[] parties_db;
@@ -8,7 +8,7 @@ class DataBase
     private int cAmount;
     private int pAmount;
     
-    public DataBase(int cAmount, int pAmount)
+    public VotesHandler(int cAmount, int pAmount)
     {
         this.cAmount = cAmount;
         this.pAmount = pAmount;
@@ -80,12 +80,12 @@ class Party
     private int id, coalition, votes;
     private String name;
     private String logo;
-    private DataBase db;
+    private VotesHandler handler;
     
-    public Party(DataBase db, Coalition coalition, String name, String logo, int votes)
+    public Party(VotesHandler handler, Coalition coalition, String name, String logo, int votes)
     {
-        this.db = db;
-        this.id = db.regParty(this);
+        this.handler = handler;
+        this.id = handler.regParty(this);
         this.coalition = coalition.getId();
         this.name = name;
         this.logo = logo;
@@ -97,7 +97,7 @@ class Party
     public int getVotes()           { return votes; }
     public String getName()         { return name; }
     public String getLogo()         { return logo; }
-    public float getPercentage()    { return db.getPercentage(this); }
+    public float getPercentage()    { return handler.getPercentage(this); }
 }
 
 class Coalition
@@ -106,12 +106,12 @@ class Coalition
     private Party[] parties;
     private String name;
     private String logo;
-    private DataBase db;
+    private VotesHandler handler;
     
-    public Coalition(DataBase db, String name, String logo, int parties)
+    public Coalition(VotesHandler handler, String name, String logo, int parties)
     {
-        this.db = db;
-        this.id = db.regCoalition(this);
+        this.handler = handler;
+        this.id = handler.regCoalition(this);
         this.name = name; // President's name
         this.logo = logo;
         
@@ -125,7 +125,7 @@ class Coalition
     public int getVotes()           { return votes; }
     public String getName()         { return name; }
     public String getLogo()         { return logo; }
-    public float getPercentage()    { return db.getPercentage(this); }
+    public float getPercentage()    { return handler.getPercentage(this); }
     
     public void addParty(Party p)
     {
