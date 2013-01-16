@@ -43,7 +43,7 @@ class DataBase
     
     public float getPercentage(Coalition c)
     {
-        long tot = 0;
+        float tot = 0;
         float percentage;
         
         for (int i = 0; i < cIndex; i++)
@@ -56,7 +56,7 @@ class DataBase
     
     public float getPercentage(Party p)
     {
-        long tot = 0;
+        float tot = 0;
         float percentage;
         
         for (int i = 0; i < pIndex; i++)
@@ -129,7 +129,7 @@ class Coalition
     
     public void addParty(Party p)
     {
-        if (partiesAddedCount > 4)
+        if (partiesAddedCount >= 4)
             return;
         
         parties[partiesAddedCount] = p;
