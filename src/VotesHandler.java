@@ -119,12 +119,20 @@ public class VotesHandler implements Cloneable
     {
         VotesHandler clean = (VotesHandler)(v.clone());
         
-        // cleaning
+        clean.parties_db = clean.parties_db.clone();
+        clean.coalitions_db = clean.coalitions_db.clone();
+        
         for (int i = 0; i < clean.pAmount; i++)
+        {
+            clean.parties_db[i] = clean.parties_db[i].makeClone();
             clean.parties_db[i].setVotes(0);
+        }
         
         for (int i = 0; i < clean.cAmount; i++)
+        {
+            clean.coalitions_db[i] = clean.coalitions_db[i].makeClone();
             clean.coalitions_db[i].setVotes(0);
+        }
         
         return clean;
     }

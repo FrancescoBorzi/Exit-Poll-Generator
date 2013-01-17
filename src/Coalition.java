@@ -1,4 +1,4 @@
-public class Coalition
+public class Coalition implements Cloneable
 {
     private int id, votes, partiesAddedCount;
     private Party[] parties;
@@ -55,5 +55,10 @@ public class Coalition
             parties[i] = null;
         
         partiesAddedCount = 0;
+    }
+    
+    public Coalition makeClone() throws CloneNotSupportedException
+    {
+        return (Coalition)(this.clone());
     }
 }

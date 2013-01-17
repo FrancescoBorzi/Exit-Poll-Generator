@@ -1,4 +1,4 @@
-public class Party
+public class Party implements Cloneable
 {
     private int id, coalition, votes;
     private String name;
@@ -25,4 +25,9 @@ public class Party
     
     public void setVotes(int votes) { this.votes = votes; }
     public void incrVotes()         { votes++; }
+    
+    public Party makeClone() throws CloneNotSupportedException
+    {
+        return (Party)(this.clone());
+    }
 }
