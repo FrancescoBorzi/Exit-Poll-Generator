@@ -1,6 +1,7 @@
 /* 
  * Contiene tutte le Coalizioni e i Partiti con i loro relativi voti e genera le percentuali.
  */
+
 class VotesHandler
 {
     private Coalition[] coalitions_db;
@@ -69,23 +70,6 @@ class VotesHandler
         percentage = p.getVotes() * 100 / tot;
         
         return percentage;
-    }
-    
-    public void reset()
-    {
-        coalitions_db = new Coalition[cAmount];
-        parties_db = new Party[pAmount];
-        pIndex = cIndex = 0;
-    }
-    
-    // (DEBUG) stampa le Coalizioni e i Partiti dello schema elettorale, con i loro relativi voti e percentuali
-    public void print()
-    {
-        for (int i = 0; i < cAmount; i++);
-            // TODO coalitions_db[i]
-        
-        for (int i = 0; i < pAmount; i++);
-           // TODO parties_db[i]
     }
     
     // Restituisce uno schema elettorale, privo di voti (che verranno riempiti dagli exit poll)
@@ -179,5 +163,30 @@ class VotesHandler
         Pinsone.addParty(Voi);
         
         return realPopulation;
+    }
+    
+    /* Strumenti DEBUG */
+    
+    // resetta lo schema elettorale
+    public void reset()
+    {
+        coalitions_db = new Coalition[cAmount];
+        parties_db = new Party[pAmount];
+        pIndex = cIndex = 0;
+    }
+    
+    // stampa le Coalizioni e i Partiti dello schema elettorale, con i loro relativi voti e percentuali
+    public void print()
+    {
+        for (int i = 0; i < cAmount; i++)
+        {
+            System.out.println("\nCoalizione: \""+coalitions_db[i].getName()+"\" Voti: "+coalitions_db[i].getVotes()+" -> "+coalitions_db[i].getPercentage()+"%\n");
+            Party parties[] = coalitions_db[i].getParties();
+            System.out.println("Liste:");
+            for (int j = 0; j < parties.length; j++)
+                System.out.println("Partito: "+parties[j].getName()+" Voti: "+parties[j].getVotes()+" -> "+parties[j].getPercentage()+"%");
+            
+            System.out.println("-------------------------------------------------");
+        }
     }
 }
