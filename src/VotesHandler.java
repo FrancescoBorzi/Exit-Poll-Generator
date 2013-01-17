@@ -1,6 +1,6 @@
-import java.util.Random;
-
-// Schema elettorale: contiene tutte le Coalizioni e i Partiti con i loro relativi voti e genera le percentuali.
+/* 
+ * Contiene tutte le Coalizioni e i Partiti con i loro relativi voti e genera le percentuali.
+ */
 class VotesHandler
 {
     private Coalition[] coalitions_db;
@@ -179,106 +179,5 @@ class VotesHandler
         Pinsone.addParty(Voi);
         
         return realPopulation;
-    }
-}
-
-class Party
-{
-    private int id, coalition, votes;
-    private String name;
-    private String logo;
-    private VotesHandler handler;
-    
-    public Party(VotesHandler handler, Coalition coalition, String name, String logo, int votes)
-    {
-        this.handler = handler;
-        this.id = handler.regParty(this);
-        this.coalition = coalition.getId();
-        this.name = name;
-        this.logo = logo;
-        this.votes = votes;
-    }
-    
-    public int getId()              { return id; }
-    public int getCoalition()       { return coalition; }
-    public int getVotes()           { return votes; }
-    public String getName()         { return name; }
-    public String getLogo()         { return logo; }
-    public float getPercentage()    { return handler.getPercentage(this); }
-    
-    public void setVotes(int votes)  { this.votes = votes; }
-}
-
-class Coalition
-{
-    private int id, votes, partiesAddedCount;
-    private Party[] parties;
-    private String name;
-    private String logo;
-    private VotesHandler handler;
-    
-    public Coalition(VotesHandler handler, String name, String logo, int parties)
-    {
-        this.handler = handler;
-        this.id = handler.regCoalition(this);
-        this.name = name; // President's name
-        this.logo = logo;
-        
-        votes = 0;
-        
-        this.parties = new Party[parties]; // parties number must be <= 4
-        partiesAddedCount = 0; // must be <= 4
-    }
-    
-    public int getId()              { return id; }
-    public int getVotes()           { return votes; }
-    public String getName()         { return name; }
-    public String getLogo()         { return logo; }
-    public float getPercentage()    { return handler.getPercentage(this); }
-    public Party[] getParties()     { return parties; }
-    
-    public void setVotes(int votes)  { this.votes = votes; }
-    
-    public void addParty(Party p)
-    {
-        if (partiesAddedCount >= 4)
-            return;
-        
-        parties[partiesAddedCount] = p;
-        partiesAddedCount++;
-        votes += p.getVotes();
-    }
-    
-    // Used for debugging only
-    public void updateVotes()
-    {
-        votes = 0;
-        for (int i = 0; i < partiesAddedCount; i++)
-        {
-            votes += parties[i].getVotes();
-        }
-    }
-    
-    // Used for debugging only
-    public void resetParties()
-    {
-        for (int i = 0; i < partiesAddedCount; i++)
-            parties[i] = null;
-        
-        partiesAddedCount = 0;
-    }
-}
-
-class Sample
-{
-    int people[];
-    
-    Sample(int[] population, int size)
-    {
-        people = new int[size];
-        Random rand = new Random();
-        
-        for (int i = 0; i < size; i ++)
-            people[i] = population[rand.nextInt(population.length)];
     }
 }
