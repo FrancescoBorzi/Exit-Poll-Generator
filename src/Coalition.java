@@ -1,4 +1,4 @@
-class Coalition
+public class Coalition
 {
     private int id, votes, partiesAddedCount;
     private Party[] parties;

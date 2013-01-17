@@ -2,7 +2,7 @@
  * Contiene tutte le Coalizioni e i Partiti con i loro relativi voti e genera le percentuali.
  */
 
-class VotesHandler
+public class VotesHandler implements Cloneable
 {
     private Coalition[] coalitions_db;
     private Party[] parties_db;
@@ -23,16 +23,29 @@ class VotesHandler
     
     public int getCoalitionsAmount()    { return cAmount; }
     public int getPartiesAmount()       { return pAmount; }
+    public Party getParty(int id)       { return parties_db[id]; }
+    
+    public int getTotVotes()
+    {
+        int tot = 0;
+        
+        for (int i = 0; i < cAmount; i ++)
+            tot += coalitions_db[i].getVotes();
+        
+        return tot;
+    }
     
     public int regCoalition(Coalition c)
     {
         if (cIndex >= coalitions_db.length)
             return -1;
         
-        coalitions_db[cIndex] = c;
+        int index = cIndex;
+        
+        coalitions_db[index] = c;
         cIndex++;
         
-        return cIndex;
+        return index;
     }
     
     public int regParty(Party p)
@@ -40,10 +53,12 @@ class VotesHandler
         if (pIndex >= parties_db.length)
             return -1;
         
-        parties_db[pIndex] = p;
+        int index = pIndex;
+        
+        parties_db[index] = p;
         pIndex++;
         
-        return pIndex;
+        return index;
     }
     
     public float getPercentage(Coalition c)
@@ -72,6 +87,33 @@ class VotesHandler
         return percentage;
     }
     
+    public int[] getCoalitionVotes()
+    {
+        int cVotes[] = new int[parties_db.length];
+        
+        for (int i = 0; i < cVotes.length; i++)
+            cVotes[i] = coalitions_db[i].getVotes();
+        
+        return cVotes;
+    }
+    
+    public int[] getPartyVotes()
+    {
+        int pVotes[] = new int[parties_db.length];
+        
+        for (int i = 0; i < pVotes.length; i++)
+            pVotes[i] = parties_db[i].getVotes();
+        
+        return pVotes;
+    }
+    
+    // aggiorna i voti delle coalizioni in base ai voti dei partiti che le compongono
+    public void updateCoalitionVotes()
+    {
+        for (int i = 0; i < coalitions_db.length; i++)
+            coalitions_db[i].updateVotes();
+    }
+    
     // Restituisce uno schema elettorale, privo di voti (che verranno riempiti dagli exit poll)
     public static VotesHandler getCleanCopy(VotesHandler v) throws CloneNotSupportedException
     {
@@ -90,7 +132,7 @@ class VotesHandler
     // Crea un risultato elettorale reale, riferendosi alle elezioni siciliane 2012
     public static VotesHandler makeRealPopulation()
     {
-        VotesHandler realPopulation = new VotesHandler(10, 21);
+        VotesHandler realPopulation = new VotesHandler(10, 20);
         
         /* Crocetta */
         Coalition Crocetta = new Coalition(realPopulation, "Crocetta", "img", 4);

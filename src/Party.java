@@ -1,4 +1,4 @@
-class Party
+public class Party
 {
     private int id, coalition, votes;
     private String name;
@@ -22,5 +22,6 @@ class Party
     public String getLogo()         { return logo; }
     public float getPercentage()    { return handler.getPercentage(this); }
     
-    public void setVotes(int votes)  { this.votes = votes; }
+    public void setVotes(int votes) { this.votes = votes; }
+    public void incrVotes()         { votes++; }
 }
