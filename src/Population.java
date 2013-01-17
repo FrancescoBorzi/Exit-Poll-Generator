@@ -9,9 +9,9 @@ public class Population
     private int pop[];
     private VotesHandler voting_scheme;
     
-    public Population(VotesHandler v)
+    public Population(VotesHandler voting_scheme)
     {
-        voting_scheme = v;
+        this.voting_scheme = voting_scheme;
         pop = new int[voting_scheme.getTotVotes()];
         int pVotes[] = voting_scheme.getPartyVotes();
         int k = 0, max = 0;

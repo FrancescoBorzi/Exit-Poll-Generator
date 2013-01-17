@@ -13,6 +13,7 @@ public class Party
         this.name = name;
         this.logo = logo;
         this.votes = votes;
+        coalition.addParty(this);
     }
     
     public int getId()              { return id; }
