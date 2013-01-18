@@ -2,23 +2,21 @@
 
 public class Tester
 {
-    public static void main(String args[]) throws CloneNotSupportedException
+    public static void main(String args[])
     {
-        // reale schema elettorale
-        VotesHandler realVotingScheme = VotesHandler.makeRealPopulation();
+        // Dichiaro lo schema elettorale
+        VotingScheme v;
         
-        // popolazione reale
-        Population realPop = new Population(realVotingScheme);
+        // Aggiungo coalizioni e partiti (in questo caso gia' pronti)
+        v = VotingScheme.makeRealVotingScheme();
+
+        // Genero la popolazione
+        v.makePopulation();
         
-        // campione della popolazione reale
-        Sample s = new Sample(realPop, 100000);
+        // Creo il campione per effettuare l'exit poll
+        v.makeSample(10000);
         
-        System.out.println("***** STAMPO LO SCHEMA ELETTORALE REALE: *****\n");
-        realPop.printVotingScheme();
-        System.out.println("***** FINE SCHEMA ELETTORALE REALE *****\n");
-                
-        System.out.println("***** STAMPO EXIT POLL: *****\n");
-        realPop.printVotingScheme();
-        System.out.println("***** FINE EXIT POLL *****\n");
+        // Stampo i risultati
+        v.print();
     }
 }

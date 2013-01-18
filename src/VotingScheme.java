@@ -1,16 +1,13 @@
-/* 
- * Contiene tutte le Coalizioni e i Partiti con i loro relativi voti e genera le percentuali.
- */
+import java.util.Random;
 
-public class VotesHandler implements Cloneable
+public class VotingScheme
 {
     private Coalition[] coalitions_db;
     private Party[] parties_db;
-    private int pIndex, cIndex;
-    private int cAmount;
-    private int pAmount;
+    private int pIndex, cIndex, cAmount, pAmount;
+    private int population[], sample[], sample_cdb[], sample_pdb[];
     
-    public VotesHandler(int cAmount, int pAmount)
+    public VotingScheme(int cAmount, int pAmount)
     {
         this.cAmount = cAmount;
         this.pAmount = pAmount;
@@ -18,12 +15,47 @@ public class VotesHandler implements Cloneable
         coalitions_db = new Coalition[cAmount];
         parties_db = new Party[pAmount];
         
-        pIndex = cIndex = 0; 
+        pIndex = cIndex = 0;
     }
     
-    public int getCoalitionsAmount()    { return cAmount; }
-    public int getPartiesAmount()       { return pAmount; }
-    public Party getParty(int id)       { return parties_db[id]; }
+    // Genera la popolazione, da utilizzare dopo aver inserito tutte le coalizioni e i partiti
+    public void makePopulation()
+    {
+        population = new int[getTotVotes()];
+        int pVotes[] = getPartyVotes();
+        int k = 0, max = 0;
+        
+        for (int i = 0; i < pVotes.length; i++)
+        {
+            max += pVotes[i];
+            for(; k < max; k++)
+                population[k] = i;
+        }
+    }
+    
+    // Crea un campione di dimensione size
+    public void makeSample(int size)
+    {
+        sample = new int[size];
+        Random rand = new Random();
+        
+        for (int i = 0; i < size; i ++)
+            sample[i] = population[rand.nextInt(population.length)];
+        
+        sample_cdb = new int[coalitions_db.length];
+        sample_pdb = new int[parties_db.length];
+                
+        for (int i = 0; i < size; i++)
+        {
+            sample_pdb[sample[i]]++;
+            sample_cdb[parties_db[sample[i]].getCoalition()]++;
+        }
+    }
+    
+    public int getCoalitionsAmount()        { return cAmount; }
+    public int getPartiesAmount()           { return pAmount; }
+    public Party getParty(int id)           { return parties_db[id]; }
+    public Coalition getCoalition(int id)   { return coalitions_db[id]; }
     
     public int getTotVotes()
     {
@@ -87,6 +119,19 @@ public class VotesHandler implements Cloneable
         return percentage;
     }
     
+    public float getPercentage(int a[], int x)
+    {
+        float tot = 0;
+        float percentage;
+        
+        for (int i = 0; i < cIndex; i++)
+            tot += a[i];
+        
+        percentage = a[x] * 100 / tot;
+        
+        return percentage;
+    }
+    
     public int[] getCoalitionVotes()
     {
         int cVotes[] = new int[coalitions_db.length];
@@ -114,33 +159,10 @@ public class VotesHandler implements Cloneable
             coalitions_db[i].updateVotes();
     }
     
-    // Restituisce uno schema elettorale, privo di voti (che verranno riempiti dagli exit poll)
-    public static VotesHandler getCleanCopy(VotesHandler v) throws CloneNotSupportedException
-    {
-        VotesHandler clean = (VotesHandler)(v.clone());
-        
-        clean.parties_db = clean.parties_db.clone();
-        clean.coalitions_db = clean.coalitions_db.clone();
-        
-        for (int i = 0; i < clean.pAmount; i++)
-        {
-            clean.parties_db[i] = clean.parties_db[i].makeClone();
-            clean.parties_db[i].setVotes(0);
-        }
-        
-        for (int i = 0; i < clean.cAmount; i++)
-        {
-            clean.coalitions_db[i] = clean.coalitions_db[i].makeClone();
-            clean.coalitions_db[i].setVotes(0);
-        }
-        
-        return clean;
-    }
-    
     // Crea un risultato elettorale reale, riferendosi alle elezioni siciliane 2012
-    public static VotesHandler makeRealPopulation()
+    public static VotingScheme makeRealVotingScheme()
     {
-        VotesHandler realPopulation = new VotesHandler(10, 20);
+        VotingScheme realPopulation = new VotingScheme(10, 20);
         
         /* Crocetta */
         Coalition Crocetta = new Coalition(realPopulation, "Crocetta", "img", 4);
@@ -210,11 +232,11 @@ public class VotesHandler implements Cloneable
     {
         for (int i = 0; i < cAmount; i++)
         {
-            System.out.println("\nCoalizione: \""+coalitions_db[i].getName()+"\" Voti: "+coalitions_db[i].getVotes()+" -> "+coalitions_db[i].getPercentage()+"%\n");
+            System.out.println("\nCoalizione: \""+coalitions_db[i].getName()+"\" |VOTI: "+coalitions_db[i].getVotes()+"| REALE -> "+coalitions_db[i].getPercentage()+"% |EXIT POLL -> "+getPercentage(sample_cdb, i)+"% (voti campione: "+sample_cdb[i]+" | dim campione: "+sample.length+")\n");
             Party parties[] = coalitions_db[i].getParties();
             System.out.println("Liste:");
             for (int j = 0; j < parties.length; j++)
-                System.out.println("Partito: "+parties[j].getName()+" Voti: "+parties[j].getVotes()+" -> "+parties[j].getPercentage()+"%");
+                System.out.println("Partito: "+parties[j].getName()+" |VOTI: "+parties[j].getVotes()+"| REALE -> "+parties[j].getPercentage()+"% |EXIT POLL: -> "+getPercentage(sample_pdb, j)+"% (voti campione: "+sample_pdb[i]+" | dim campione: "+sample.length+")");
             
             System.out.println("-------------------------------------------------");
         }

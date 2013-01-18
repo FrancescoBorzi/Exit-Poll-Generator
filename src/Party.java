@@ -1,11 +1,11 @@
-public class Party implements Cloneable
+public class Party
 {
     private int id, coalition, votes;
     private String name;
     private String logo;
-    private VotesHandler handler;
+    private VotingScheme handler;
     
-    public Party(VotesHandler handler, Coalition coalition, String name, String logo, int votes)
+    public Party(VotingScheme handler, Coalition coalition, String name, String logo, int votes)
     {
         this.handler = handler;
         this.id = handler.regParty(this);

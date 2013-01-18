@@ -1,12 +1,12 @@
-public class Coalition implements Cloneable
+public class Coalition
 {
     private int id, votes, partiesAddedCount;
     private Party[] parties;
     private String name;
     private String logo;
-    private VotesHandler handler;
+    private VotingScheme handler;
     
-    public Coalition(VotesHandler handler, String name, String logo, int parties)
+    public Coalition(VotingScheme handler, String name, String logo, int parties)
     {
         this.handler = handler;
         this.id = handler.regCoalition(this);
