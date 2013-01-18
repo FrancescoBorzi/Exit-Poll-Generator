@@ -1,3 +1,11 @@
+/*
+ *  Utilizzo:
+ *  1) Viene creato passando due int: (numero di coalizioni, numero partiti)
+ *  2) Partiti e coalizioni vengono aggiunti con i metodi regParty() e regCoalition()
+ *  3) Una volta aggiunti tutte le coalizioni e i partite, makePopulation() genera la popolazione
+ *  4) Con makeSample(n) viene generato un campione di n elementi
+ */
+
 import java.util.Random;
 
 public class VotingScheme
@@ -18,39 +26,7 @@ public class VotingScheme
         pIndex = cIndex = 0;
     }
     
-    // Genera la popolazione, da utilizzare dopo aver inserito tutte le coalizioni e i partiti
-    public void makePopulation()
-    {
-        population = new int[getTotVotes()];
-        int pVotes[] = getPartyVotes();
-        int k = 0, max = 0;
-        
-        for (int i = 0; i < pVotes.length; i++)
-        {
-            max += pVotes[i];
-            for(; k < max; k++)
-                population[k] = i;
-        }
-    }
-    
-    // Crea un campione di dimensione size
-    public void makeSample(int size)
-    {
-        sample = new int[size];
-        Random rand = new Random();
-        
-        for (int i = 0; i < size; i ++)
-            sample[i] = population[rand.nextInt(population.length)];
-        
-        sample_cdb = new int[coalitions_db.length];
-        sample_pdb = new int[parties_db.length];
-                
-        for (int i = 0; i < size; i++)
-        {
-            sample_pdb[sample[i]]++;
-            sample_cdb[parties_db[sample[i]].getCoalition()]++;
-        }
-    }
+    /* GET Methods */
     
     public int getCoalitionsAmount()        { return cAmount; }
     public int getPartiesAmount()           { return pAmount; }
@@ -67,33 +43,7 @@ public class VotingScheme
         return tot;
     }
     
-    public int regCoalition(Coalition c)
-    {
-        if (cIndex >= coalitions_db.length)
-            return -1;
-        
-        int index = cIndex;
-        
-        coalitions_db[index] = c;
-        cIndex++;
-        
-        return index;
-    }
-    
-    public int regParty(Party p)
-    {
-        if (pIndex >= parties_db.length)
-            return -1;
-        
-        int index = pIndex;
-        
-        parties_db[index] = p;
-        pIndex++;
-        
-        return index;
-    }
-    
-    public float getPercentage(Coalition c)
+     public float getPercentage(Coalition c)
     {
         float tot = 0;
         float percentage;
@@ -150,6 +100,68 @@ public class VotingScheme
             pVotes[i] = parties_db[i].getVotes();
         
         return pVotes;
+    }
+    
+    /* Initialization methods */
+    
+    public int regCoalition(Coalition c)
+    {
+        if (cIndex >= coalitions_db.length)
+            return -1;
+        
+        int index = cIndex;
+        
+        coalitions_db[index] = c;
+        cIndex++;
+        
+        return index;
+    }
+    
+    public int regParty(Party p)
+    {
+        if (pIndex >= parties_db.length)
+            return -1;
+        
+        int index = pIndex;
+        
+        parties_db[index] = p;
+        pIndex++;
+        
+        return index;
+    }
+    
+    // Genera la popolazione, da utilizzare dopo aver inserito tutte le coalizioni e i partiti
+    public void makePopulation()
+    {
+        population = new int[getTotVotes()];
+        int pVotes[] = getPartyVotes();
+        int k = 0, max = 0;
+        
+        for (int i = 0; i < pVotes.length; i++)
+        {
+            max += pVotes[i];
+            for(; k < max; k++)
+                population[k] = i;
+        }
+    }
+    
+    // Crea un campione di dimensione size
+    public void makeSample(int size)
+    {
+        sample = new int[size];
+        Random rand = new Random();
+        
+        for (int i = 0; i < size; i ++)
+            sample[i] = population[rand.nextInt(population.length)];
+        
+        sample_cdb = new int[coalitions_db.length];
+        sample_pdb = new int[parties_db.length];
+                
+        for (int i = 0; i < size; i++)
+        {
+            sample_pdb[sample[i]]++;
+            sample_cdb[parties_db[sample[i]].getCoalition()]++;
+        }
     }
     
     // aggiorna i voti delle coalizioni in base ai voti dei partiti che le compongono
