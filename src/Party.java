@@ -25,9 +25,4 @@ public class Party
     
     public void setVotes(int votes) { this.votes = votes; }
     public void incrVotes()         { votes++; }
-    
-    public Party makeClone() throws CloneNotSupportedException
-    {
-        return (Party)(this.clone());
-    }
 }

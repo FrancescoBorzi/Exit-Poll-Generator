@@ -56,9 +56,4 @@ public class Coalition
         
         partiesAddedCount = 0;
     }
-    
-    public Coalition makeClone() throws CloneNotSupportedException
-    {
-        return (Coalition)(this.clone());
-    }
 }
