@@ -12,7 +12,7 @@ public class VotingScheme
 {
     private Coalition[] coalitions_db;
     private Party[] parties_db;
-    private int pIndex, cIndex, cAmount, pAmount;
+    private int pIndex, cIndex, cAmount, pAmount, samplesCoalitionAverage, samplesCoalitionAveragePercentage, samplesCoalitionDevSt;
     private int population[];
     private Sample samples[];
     
@@ -78,7 +78,7 @@ public class VotingScheme
         for (int i = 0; i < cIndex; i++)
             tot += a[i];
         
-        percentage = a[x] * 100 / tot;
+        percentage = a[x] * 100f / tot;
         
         return percentage;
     }
@@ -176,6 +176,26 @@ public class VotingScheme
             samples[i] = makeSample(size);
     }
     
+    // Calcola media dei voti per la Coalizione id dei Campioni
+    public void samplesCoalitionAverage(int id)
+    {
+        if (samples == null)
+        {
+            samplesCoalitionAverage = 0;
+            samplesCoalitionAveragePercentage = 0;
+            return;
+        }
+        
+        for (int i = 0; i < samples.length; i++)
+        {
+            samplesCoalitionAverage += samples[i].sample_cdb[id];
+            samplesCoalitionAveragePercentage += getPercentage(samples[i].sample_cdb, id);
+        }
+        
+        samplesCoalitionAverage /= samples.length;
+        samplesCoalitionAveragePercentage /= samples.length;
+    }
+    
     // aggiorna i voti delle coalizioni in base ai voti dei partiti che le compongono
     public void updateCoalitionVotes()
     {
@@ -257,12 +277,16 @@ public class VotingScheme
         if (samples == null)
             return;
         
-        System.out.println("\nCoalizione: \""+coalitions_db[id].getName()+"\" | VOTI REALI: "+coalitions_db[id].getVotes()+"| PERCENTUALE REALE -> "+coalitions_db[id].getPercentage()+"\n\n");
+        System.out.println("\nCoalizione: \""+coalitions_db[id].getName()+"\" | VOTI REALI: "+coalitions_db[id].getVotes()+"| PERCENTUALE REALE -> "+coalitions_db[id].getPercentage()+"%\n\n");
         
         for (int i = 0; i < samples.length; i++)
         {
-            System.out.println("Campione["+i+"]: VOTI="+samples[i].sample_cdb[id]+" PERCENTUALE="+getPercentage(samples[i].sample_cdb, id)+"%");
+            System.out.println("Campione["+i+"]: VOTI = "+samples[i].sample_cdb[id]+" PERCENTUALE = "+(int)getPercentage(samples[i].sample_cdb, id)+"%");
         }
+        
+        samplesCoalitionAverage(id);
+        
+        System.out.println("\nMedia: VOTI = "+samplesCoalitionAverage+" PERCENTUALE = "+samplesCoalitionAveragePercentage+"%");
         
         System.out.println("\n");
     }
