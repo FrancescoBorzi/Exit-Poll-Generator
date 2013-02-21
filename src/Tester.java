@@ -13,10 +13,12 @@ public class Tester
         // Genero la popolazione
         v.makePopulation();
         
+        int dimCampione = Integer.parseInt(args[0]);
+        
         // Creo il campione per effettuare l'exit poll
-        v.makeSample(10000);
+        //v.makeSample(dimCampione);
         
         // Stampo i risultati
-        v.print();
+        //v.print();
     }
 }

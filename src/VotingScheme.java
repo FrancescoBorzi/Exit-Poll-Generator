@@ -13,7 +13,8 @@ public class VotingScheme
     private Coalition[] coalitions_db;
     private Party[] parties_db;
     private int pIndex, cIndex, cAmount, pAmount;
-    private int population[], sample[], sample_cdb[], sample_pdb[];
+    private int population[];
+    private Sample samples[];
     
     public VotingScheme(int cAmount, int pAmount)
     {
@@ -146,22 +147,33 @@ public class VotingScheme
     }
     
     // Crea un campione di dimensione size
-    public void makeSample(int size)
+    public Sample makeSample(int size)
     {
-        sample = new int[size];
+        Sample newsample = new Sample(size);
         Random rand = new Random();
         
         for (int i = 0; i < size; i ++)
-            sample[i] = population[rand.nextInt(population.length)];
+            newsample.sample[i] = population[rand.nextInt(population.length)];
         
-        sample_cdb = new int[coalitions_db.length];
-        sample_pdb = new int[parties_db.length];
+        newsample.sample_cdb = new int[coalitions_db.length];
+        newsample.sample_pdb = new int[parties_db.length];
                 
         for (int i = 0; i < size; i++)
         {
-            sample_pdb[sample[i]]++;
-            sample_cdb[parties_db[sample[i]].getCoalition()]++;
+            newsample.sample_pdb[newsample.sample[i]]++;
+            newsample.sample_cdb[parties_db[newsample.sample[i]].getCoalition()]++;
         }
+        
+        return newsample;
+    }
+    
+    // Crea un array contenente n campioni, ciascuno di dimensione size
+    public void makeSamplesArray(int n, int size)
+    {
+        samples = new Sample[n];
+        
+        for (int i = 0; i < n; i++)
+            samples[i] = new Sample(size);
     }
     
     // aggiorna i voti delle coalizioni in base ai voti dei partiti che le compongono
@@ -240,7 +252,7 @@ public class VotingScheme
     }
     
     // stampa le Coalizioni e i Partiti dello schema elettorale, con i loro relativi voti e percentuali
-    public void print()
+    /*public void print()
     {
         for (int i = 0; i < cAmount; i++)
         {
@@ -252,5 +264,5 @@ public class VotingScheme
             
             System.out.println("-------------------------------------------------");
         }
-    }
+    }*/
 }
