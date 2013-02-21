@@ -173,7 +173,7 @@ public class VotingScheme
         samples = new Sample[n];
         
         for (int i = 0; i < n; i++)
-            samples[i] = new Sample(size);
+            samples[i] = makeSample(size);
     }
     
     // aggiorna i voti delle coalizioni in base ai voti dei partiti che le compongono
@@ -249,6 +249,22 @@ public class VotingScheme
         coalitions_db = new Coalition[cAmount];
         parties_db = new Party[pAmount];
         pIndex = cIndex = 0;
+    }
+    
+    // stampa la Coalizione id e confronta tutti i campioni
+    public void printCoalitionByID(int id)
+    {
+        if (samples == null)
+            return;
+        
+        System.out.println("\nCoalizione: \""+coalitions_db[id].getName()+"\" | VOTI REALI: "+coalitions_db[id].getVotes()+"| PERCENTUALE REALE -> "+coalitions_db[id].getPercentage()+"\n\n");
+        
+        for (int i = 0; i < samples.length; i++)
+        {
+            System.out.println("Campione["+i+"]: VOTI="+samples[i].sample_cdb[id]+" PERCENTUALE="+getPercentage(samples[i].sample_cdb, id)+"%");
+        }
+        
+        System.out.println("\n");
     }
     
     // stampa le Coalizioni e i Partiti dello schema elettorale, con i loro relativi voti e percentuali

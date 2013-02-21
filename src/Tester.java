@@ -16,9 +16,9 @@ public class Tester
         int dimCampione = Integer.parseInt(args[0]);
         
         // Creo il campione per effettuare l'exit poll
-        //v.makeSample(dimCampione);
+        v.makeSamplesArray(30, dimCampione);
         
         // Stampo i risultati
-        //v.print();
+        v.printCoalitionByID(0);
     }
 }

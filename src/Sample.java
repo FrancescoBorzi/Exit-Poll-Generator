@@ -4,7 +4,7 @@ public class Sample
     
     public Sample(int size)
     {
-       sample = new int[size];
+        sample = new int[size];
     }
 }
 
