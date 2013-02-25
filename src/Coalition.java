@@ -23,7 +23,7 @@ public class Coalition
     public int getVotes()           { return votes; }
     public String getName()         { return name; }
     public String getLogo()         { return logo; }
-    public float getPercentage()    { return handler.getPercentage(this); }
+    public double getPercentage()    { return handler.getPercentage(this); }
     public Party[] getParties()     { return parties; }
     
     public void setVotes(int votes)  { this.votes = votes; }

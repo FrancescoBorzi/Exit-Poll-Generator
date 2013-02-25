@@ -12,7 +12,8 @@ public class VotingScheme
 {
     private Coalition[] coalitions_db;
     private Party[] parties_db;
-    private int pIndex, cIndex, cAmount, pAmount, samplesCoalitionAverage, samplesCoalitionAveragePercentage, samplesCoalitionDevSt;
+    private int pIndex, cIndex, cAmount, pAmount;
+    private double samplesCoalitionAverage, samplesCoalitionAveragePercentage, samplesCoalitionDevSt;
     private int population[];
     private Sample samples[];
     
@@ -44,10 +45,10 @@ public class VotingScheme
         return tot;
     }
     
-     public float getPercentage(Coalition c)
+     public double getPercentage(Coalition c)
     {
-        float tot = 0;
-        float percentage;
+        double tot = 0;
+        double percentage;
         
         for (int i = 0; i < cIndex; i++)
             tot += coalitions_db[i].getVotes();
@@ -57,10 +58,10 @@ public class VotingScheme
         return percentage;
     }
     
-    public float getPercentage(Party p)
+    public double getPercentage(Party p)
     {
-        float tot = 0;
-        float percentage;
+        double tot = 0;
+        double percentage;
         
         for (int i = 0; i < pIndex; i++)
             tot += parties_db[i].getVotes();
@@ -70,10 +71,10 @@ public class VotingScheme
         return percentage;
     }
     
-    public float getPercentage(int a[], int x)
+    public double getPercentage(int a[], int x)
     {
-        float tot = 0;
-        float percentage;
+        double tot = 0;
+        double percentage;
         
         for (int i = 0; i < cIndex; i++)
             tot += a[i];
@@ -176,7 +177,7 @@ public class VotingScheme
             samples[i] = makeSample(size);
     }
     
-    // Calcola media dei voti per la Coalizione id dei Campioni
+    // Calcola media e deviazione standard dei voti per la Coalizione id dei Campioni
     public void samplesCoalitionAverage(int id)
     {
         if (samples == null)
@@ -186,6 +187,8 @@ public class VotingScheme
             return;
         }
         
+        // calcolo media
+        
         for (int i = 0; i < samples.length; i++)
         {
             samplesCoalitionAverage += samples[i].sample_cdb[id];
@@ -194,6 +197,14 @@ public class VotingScheme
         
         samplesCoalitionAverage /= samples.length;
         samplesCoalitionAveragePercentage /= samples.length;
+        
+        // calcolo deviazione standard
+        
+        for (int i = 0; i < samples.length; i++)
+            samplesCoalitionDevSt += Math.pow(samples[i].sample_cdb[id] - samplesCoalitionAverage, 2);
+        
+        samplesCoalitionDevSt /= samples.length;
+        samplesCoalitionDevSt = Math.sqrt(samplesCoalitionDevSt);
     }
     
     // aggiorna i voti delle coalizioni in base ai voti dei partiti che le compongono
@@ -281,12 +292,14 @@ public class VotingScheme
         
         for (int i = 0; i < samples.length; i++)
         {
-            System.out.println("Campione["+i+"]: VOTI = "+samples[i].sample_cdb[id]+" PERCENTUALE = "+(int)getPercentage(samples[i].sample_cdb, id)+"%");
+            System.out.println("Campione["+i+"]: VOTI = "+samples[i].sample_cdb[id]+" PERCENTUALE = "+getPercentage(samples[i].sample_cdb, id)+"%");
         }
         
         samplesCoalitionAverage(id);
         
-        System.out.println("\nMedia: VOTI = "+samplesCoalitionAverage+" PERCENTUALE = "+samplesCoalitionAveragePercentage+"%");
+        System.out.println("\nMedia voti = "+samplesCoalitionAverage);
+        System.out.println("Media percentuali = "+samplesCoalitionAveragePercentage+"%");
+        System.out.println("Deviazione standard = "+samplesCoalitionDevSt);
         
         System.out.println("\n");
     }
