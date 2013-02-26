@@ -21,7 +21,7 @@ public class Party
     public int getVotes()           { return votes; }
     public String getName()         { return name; }
     public String getLogo()         { return logo; }
-    public double getPercentage()    { return handler.getPercentage(this); }
+    public double getPercentage()   { return handler.getPercentage(this); }
     
     public void setVotes(int votes) { this.votes = votes; }
     public void incrVotes()         { votes++; }
