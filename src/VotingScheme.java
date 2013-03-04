@@ -208,17 +208,21 @@ public class VotingScheme
         samplesCoalitionDevSt = Math.sqrt(samplesCoalitionDevSt);
     }
     
-    public double[] confidenceIntervals()
+    public double[] confidenceIntervals(int n)
     {
         double ci[] = new double[4];
         
+        double x = samplesCoalitionDevSt/Math.sqrt(n);
+        double x005 = invNormSt005*x;
+        double x01 = invNormSt01*x;
+        
         // alpha = 0,05
-        ci[0] = samplesCoalitionAverage - invNormSt005/Math.sqrt(samplesCoalitionDevSt);
-        ci[1] = samplesCoalitionAverage + invNormSt005/Math.sqrt(samplesCoalitionDevSt);
+        ci[0] = samplesCoalitionAverage - x005;
+        ci[1] = samplesCoalitionAverage + x005;
         
         // alpha = 0,1
-        ci[2] = samplesCoalitionAverage - invNormSt01/Math.sqrt(samplesCoalitionDevSt);
-        ci[3] = samplesCoalitionAverage + invNormSt01/Math.sqrt(samplesCoalitionDevSt);
+        ci[2] = samplesCoalitionAverage - x01;
+        ci[3] = samplesCoalitionAverage + x01;
         
         return ci;
     }
@@ -321,7 +325,7 @@ public class VotingScheme
         System.out.println("Media percentuali = "+samplesCoalitionAveragePercentage+"%");
         System.out.println("Deviazione standard = "+samplesCoalitionDevSt+"\n");
         
-        double intervals[] = confidenceIntervals();
+        double intervals[] = confidenceIntervals(samples.length);
         
         System.out.println("Intervallo di confidenza (alpha=0,05): ["+intervals[0]+", "+intervals[1]+"]");
         System.out.println("Intervallo di confidenza (alpha=0,1): ["+intervals[2]+", "+intervals[3]+"]");
