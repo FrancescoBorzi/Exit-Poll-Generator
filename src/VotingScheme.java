@@ -208,6 +208,21 @@ public class VotingScheme
         samplesCoalitionDevSt = Math.sqrt(samplesCoalitionDevSt);
     }
     
+    public double[] confidenceIntervals()
+    {
+        double ci[] = new double[4];
+        
+        // alpha = 0,05
+        ci[0] = samplesCoalitionAverage - invNormSt005/Math.sqrt(samplesCoalitionDevSt);
+        ci[1] = samplesCoalitionAverage + invNormSt005/Math.sqrt(samplesCoalitionDevSt);
+        
+        // alpha = 0,1
+        ci[2] = samplesCoalitionAverage - invNormSt01/Math.sqrt(samplesCoalitionDevSt);
+        ci[3] = samplesCoalitionAverage + invNormSt01/Math.sqrt(samplesCoalitionDevSt);
+        
+        return ci;
+    }
+    
     // aggiorna i voti delle coalizioni in base ai voti dei partiti che le compongono
     public void updateCoalitionVotes()
     {
@@ -304,7 +319,12 @@ public class VotingScheme
         
         System.out.println("\nMedia voti = "+samplesCoalitionAverage);
         System.out.println("Media percentuali = "+samplesCoalitionAveragePercentage+"%");
-        System.out.println("Deviazione standard = "+samplesCoalitionDevSt);
+        System.out.println("Deviazione standard = "+samplesCoalitionDevSt+"\n");
+        
+        double intervals[] = confidenceIntervals();
+        
+        System.out.println("Intervallo di confidenza (alpha=0,05): ["+intervals[0]+", "+intervals[1]+"]");
+        System.out.println("Intervallo di confidenza (alpha=0,1): ["+intervals[2]+", "+intervals[3]+"]");
         
         System.out.println("\n");
     }
