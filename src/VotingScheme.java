@@ -16,6 +16,7 @@ public class VotingScheme
     private double samplesCoalitionAverage, samplesCoalitionAveragePercentage, samplesCoalitionDevSt;
     private int population[];
     private Sample samples[];
+    private final static double invNormSt01 = 1.644853627, invNormSt005 = 1.9599639845;
     
     public VotingScheme(int cAmount, int pAmount)
     {
@@ -271,6 +272,10 @@ public class VotingScheme
         
         return realPopulation;
     }
+    
+    // Restituiscono i valori di  INV.NORM.ST
+    public static double getInvNormSt01()   { return invNormSt01; }
+    public static double getInvNormSt005()  { return invNormSt005; }
     
     /* Strumenti DEBUG */
     
